@@ -4,8 +4,7 @@ Version: 0.0.1
 Authors@R: person("Ashis", "Saha", email = "alorchhota@gmail.com", role = c("aut", "cre"))
 Description: Helps to read/write files
 Depends: R (>= 3.5)
-Imports:
-  data.table
+Imports: data.table
 License: GPL v3
 Encoding: UTF-8
 LazyData: true
