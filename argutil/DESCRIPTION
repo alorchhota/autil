@@ -1,0 +1,10 @@
+Package: argutil
+Title: Argument Utility
+Version: 0.0.0.1
+Authors@R: person("Ashis", "Saha", email = "alorchhota@gmail.com", role = c("aut", "cre"))
+Description: Utility functions to process arguments
+Depends: R (>= 3.5)
+License: GNU GPL v3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1.9000
