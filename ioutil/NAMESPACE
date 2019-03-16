@@ -2,4 +2,5 @@
 
 export(read_df)
 export(read_gsea_db)
+export(verbose_print)
 export(write_df)
