@@ -1,0 +1,24 @@
+### How to create a package from scratch
+# url: https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
+library(devtools)
+library(roxygen2)
+create('my_package')
+# update DESCRIPTION file
+# write function inside R dir with documentation
+document('ioutil')
+install('ioutil')
+
+### how to install your package from github
+install_github(repo = 'alorchhota/autil', subdir = 'ioutil')
+
+### Dependencies on other packages
+# described in DESCRIPTION
+# Dependencies: loads packages with the current one
+# Imports: these packages are installed when current package is installed, but not loaded until required.
+# Suggests: similar to imports, but not necessary for the package. may be used in examples.
+# use "require(pkg)" inside the function where pkg is needed.
+# use "biocViews:" in DESCRIPTION file for bioconductor packages.
+
+
+### how to add references in documentation
+# url: https://cran.r-project.org/web/packages/Rdpack/vignettes/Inserting_bibtex_references.pdf
