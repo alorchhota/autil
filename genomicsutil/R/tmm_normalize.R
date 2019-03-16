@@ -9,7 +9,7 @@
 #' @export
 #' @importFrom Rdpack reprompt
 #' @references 
-#' \insertRef{Robinson2010}{datautil}
+#' \insertRef{Robinson2010}{genomicsutil}
 tmm_normalize <- function(expr_mat){
   require('edgeR')
   

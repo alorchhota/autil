@@ -1,8 +1,8 @@
-Package: datautil
-Title: Data Processing Utility
+Package: genomicsutil
+Title: Genomics Utility
 Version: 0.0.0.1
 Authors@R: person("Ashis", "Saha", email = "alorchhota@gmail.com", role = c("aut", "cre"))
-Description: This package contains data processing functions.
+Description: This package contains genomics-related utility functions.
 Depends: R (>= 3.5)
 biocViews:
 Imports: Rdpack, edgeR

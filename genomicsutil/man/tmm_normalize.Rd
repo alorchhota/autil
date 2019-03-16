@@ -20,5 +20,5 @@ y <- matrix( rpois(1000, lambda=5), nrow=200 )
 tmm_y = tmm_normalize(y)
 }
 \references{
-\insertRef{Robinson2010}{datautil}
+\insertRef{Robinson2010}{genomicsutil}
 }
