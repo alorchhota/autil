@@ -23,3 +23,7 @@ install_github(repo = 'alorchhota/autil', subdir = 'ioutil')
 
 ### how to add references in documentation
 # url: https://cran.r-project.org/web/packages/Rdpack/vignettes/Inserting_bibtex_references.pdf
+
+
+### how to include multiple functions in one documentation file
+# url: https://gist.github.com/jefferys/b79fe87314b0dc72fec9
