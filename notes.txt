@@ -18,6 +18,7 @@ install_github(repo = 'alorchhota/autil', subdir = 'ioutil')
 # Suggests: similar to imports, but not necessary for the package. may be used in examples.
 # use "require(pkg)" inside the function where pkg is needed.
 # use "biocViews:" in DESCRIPTION file for bioconductor packages.
+# install non-standard packages: https://cran.r-project.org/web/packages/devtools/vignettes/dependencies.html
 
 
 ### how to add references in documentation
