@@ -24,12 +24,12 @@
 #' Above functions filter processed gene expression data (\code{expr.df}) based on several different criteria.
 #' Typical filtering scenarios include:
 #' \itemize{
-#'   \item keeping only autosomal genes, excluding genes in sex and mitochondrial chromosomes using \code{filter_expr_on_chr},
-#'   \item including genes with mappability >= 0.8 for an analysis using \code{filter_expr_on_mappability},
-#'   \item inlcluding only protein-coding genes in an analysis using \code{filter_expr_on_gene_type},
-#'   \item include genes with TPM > 0.1 in \eqn{\ge} 10 samples and read count > 6 in \eqn{\ge} 10 samples using \code{filter_expr_on_tpm_read},
-#'   \item take only 500 most variant genes using \code{filter_expr_on_variance}, and
-#'   \item take only 500 genes with highest coefficient of variation using \code{filter_expr_on_coeff_of_variation}.
+#'   \item keeping only autosomal genes, excluding genes in sex and mitochondrial chromosomes using \code{filter_expr_by_chr},
+#'   \item including genes with mappability >= 0.8 for an analysis using \code{filter_expr_by_mappability},
+#'   \item inlcluding only protein-coding genes in an analysis using \code{filter_expr_by_gene_type},
+#'   \item include genes with TPM > 0.1 in \eqn{\ge} 10 samples and read count > 6 in \eqn{\ge} 10 samples using \code{filter_expr_by_tpm_read},
+#'   \item take only 500 most variant genes using \code{filter_expr_by_variance}, and
+#'   \item take only 500 genes with highest coefficient of variation using \code{filter_expr_by_coeff_of_variation}.
 #' }
 #' 
 #' Data formats are important for these filter functions.
@@ -46,7 +46,7 @@
 #' @describeIn filter_expr filteres to include or explore genes from given chromosomes (if not NULL). Chromosome names with or without "chr" prefix are gracefully handled.
 #' @return Each function returns a data frame or matrix like object (similar to input type) with filtered expression data.
 #' @export
-filter_expr_on_chr <- function(expr.df, annot.gene, chr.include=as.character(1:22), chr.exclude=NULL, chr.col='chr'){
+filter_expr_by_chr <- function(expr.df, annot.gene, chr.include=as.character(1:22), chr.exclude=NULL, chr.col='chr'){
   stopifnot(length(chr.col) == 1 && ((is.character(chr.col) && chr.col %in% colnames(annot.gene)) || (is.numeric(chr.col) && chr.col <= ncol(annot.gene))))
   features.passed = rownames(expr.df)
   if(!is.null(chr.include)){
@@ -63,7 +63,7 @@ filter_expr_on_chr <- function(expr.df, annot.gene, chr.include=as.character(1:2
 
 #' @describeIn filter_expr filters out genes with mappability less than a threshold.
 #' @export
-filter_expr_on_mappability <- function(expr.df, annot.mappability, min.mappability=0.97, mappability.col='mappability'){
+filter_expr_by_mappability <- function(expr.df, annot.mappability, min.mappability=0.97, mappability.col='mappability'){
   stopifnot(length(mappability.col) == 1 && ((is.character(mappability.col) && mappability.col %in% colnames(annot.mappability)) || (is.numeric(mappability.col) && mappability.col <= ncol(annot.mappability)) ))
   features = rownames(expr.df)
   mappabilities = annot.mappability[features, mappability.col]
@@ -74,7 +74,7 @@ filter_expr_on_mappability <- function(expr.df, annot.mappability, min.mappabili
 
 #' @export
 #' @describeIn filter_expr filters expression to include specific types of genes only.
-filter_expr_on_gene_type <- function(expr.df, annot.gene, type.col = 'gene_type', type.values = 'protein_coding'){
+filter_expr_by_gene_type <- function(expr.df, annot.gene, type.col = 'gene_type', type.values = 'protein_coding'){
   stopifnot(length(type.col) == 1 && ((is.character(type.col) && type.col %in% colnames(annot.gene)) || (is.numeric(type.col) && type.col <= ncol(annot.gene))))
   features = rownames(expr.df)
   gene_types = annot.gene[features, type.col]
@@ -84,8 +84,8 @@ filter_expr_on_gene_type <- function(expr.df, annot.gene, type.col = 'gene_type'
 }
 
 #' @export
-#' @describeIn filter_expr filters expression data to include each gene with TPM > \code{min.tpm} in \eqn{\ge} \code{min.samples} samples and with read count > \code{min.count} in \eqn{\ge} \code{min.samples} samples.
-filter_expr_on_tpm_read <- function(expr.df, tpm.df, count.df, min.tpm = 0.1, min.count = 6, min.samples = 10){
+#' @describeIn filter_expr filters expression data to include each gene with TPM \eqn{\ge} \code{min.tpm} in \eqn{\ge} \code{min.samples} samples and with read count \eqn{\ge} \code{min.count} in \eqn{\ge} \code{min.samples} samples.
+filter_expr_by_tpm_read <- function(expr.df, tpm.df, count.df, min.tpm = 0.1, min.count = 6, min.samples = 10){
   ### make sure matrices have the same order as expr.df
   features = rownames(expr.df)
   samples = colnames(expr.df)
@@ -99,8 +99,8 @@ filter_expr_on_tpm_read <- function(expr.df, tpm.df, count.df, min.tpm = 0.1, mi
   count.df <- count.df[features, samples,drop=F]
   
   ### filter
-  n_samples_w_min_tpm <- apply(tpm.df>min.tpm, 1, sum)
-  n_samples_w_min_count <- apply(count.df>min.count, 1, sum)
+  n_samples_w_min_tpm <- apply(tpm.df>=min.tpm, 1, sum)
+  n_samples_w_min_count <- apply(count.df>=min.count, 1, sum)
   has.min.samples <- (n_samples_w_min_tpm >= min.samples) & (n_samples_w_min_count >= min.samples)
   features.passed <- names(has.min.samples[has.min.samples])
   expr.df <- expr.df[features.passed,,drop=F]
@@ -110,7 +110,7 @@ filter_expr_on_tpm_read <- function(expr.df, tpm.df, count.df, min.tpm = 0.1, mi
 
 #' @export
 #' @describeIn filter_expr filters expression data to include most variant \code{n} genes with mean \eqn{\ge} \code{min.mean} and variance \eqn{\ge} \code{min.var}
-filter_expr_on_variance <- function(expr.df, raw.df, n, min.var=1e-6, min.mean=-Inf){
+filter_expr_by_variance <- function(expr.df, raw.df, n, min.var=1e-6, min.mean=-Inf){
   ### make sure matrices have the same order as expr.df
   features = rownames(expr.df)
   samples = colnames(expr.df)
@@ -131,7 +131,7 @@ filter_expr_on_variance <- function(expr.df, raw.df, n, min.var=1e-6, min.mean=-
 
 #' @export
 #' @describeIn filter_expr filters expression data to include genes with \code{n} highest coefficient of variation (variance/mean) and mean \eqn{\ge} \code{min.mean} and variance \eqn{\ge} \code{min.var}
-filter_expr_on_coeff_of_variation <- function(expr.df, raw.df, n, min.var=1e-6, min.mean=1e-2){
+filter_expr_by_coeff_of_variation <- function(expr.df, raw.df, n, min.var=1e-6, min.mean=1e-2){
   ### make sure matrices have the same order as expr.df
   features = rownames(expr.df)
   samples = colnames(expr.df)
