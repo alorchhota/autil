@@ -19,7 +19,7 @@ tail_df(x, pos = "left", nrow = 3, ncol = 4)
 \item{ncol}{numeric. number of columns.}
 }
 \value{
-returns a data-frame or a matrix-like object with head or tail of the data-frame.
+returns a data-frame or a matrix-like object (depending on the input) with head or tail of the data-frame.
 }
 \description{
 \code{head_df} returns top-left (when \code{pos = 'left'}) or top-right (when \code{pos = 'right'}) part of a data.frame or a matrix-like object.
@@ -30,5 +30,5 @@ x = matrix(1:100, nrow = 10, byrow = F, dimnames = list(paste0('r',1:10), paste0
 head_df(x)
 head_df(x, 'right')
 tail_df(x, nrow = 2)
-tail_df(x, 'right', nrow = 5, ncol = 5)
+tail_df(x, 'right', nrow = 2, ncol = 5)
 }
