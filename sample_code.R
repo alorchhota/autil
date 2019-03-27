@@ -32,22 +32,22 @@ head_df(expr_df)
 dim(expr_df)
 
 # take only autosomal genes
-expr_df = filter_expr_on_chr(expr_df, annot.gene = gene_annot_df, chr.include = c(1:22))
+expr_df = filter_expr_by_chr(expr_df, annot.gene = gene_annot_df, chr.include = c(1:22))
 dim(expr_df)
 
 # take only protein-coding genes
-expr_df = filter_expr_on_gene_type(expr_df, annot.gene = gene_annot_df, type.col = 'gene_type', type.values = 'protein_coding')
+expr_df = filter_expr_by_gene_type(expr_df, annot.gene = gene_annot_df, type.col = 'gene_type', type.values = 'protein_coding')
 dim(expr_df)
 
 # take genes with mappability >= 0.8
-expr_df = filter_expr_on_mappability(expr_df, annot.mappability = mappability_df, min.mappability = 0.8, mappability.col = 1)
+expr_df = filter_expr_by_mappability(expr_df, annot.mappability = mappability_df, min.mappability = 0.8, mappability.col = 1)
 dim(expr_df)
 
 # filter on min tpm and min count in min samples
-expr_df = filter_expr_on_tpm_read(expr_df, tpm.df = tpm_df, count.df = count_df, min.tpm = 1, min.count = 10, min.samples = 20)
+expr_df = filter_expr_by_tpm_read(expr_df, tpm.df = tpm_df, count.df = count_df, min.tpm = 1, min.count = 10, min.samples = 20)
 dim(expr_df)
 
 # filter on gene coefficient of variation
-expr_df = filter_expr_on_coeff_of_variation(expr_df, raw.df = tpm_df, n = 1000)
+expr_df = filter_expr_by_coeff_of_variation(expr_df, raw.df = tpm_df, n = 1000)
 dim(expr_df)
 
