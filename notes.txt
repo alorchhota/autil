@@ -52,3 +52,26 @@ test_that("parse delimitter", {
 devtools::test('miscutil') # executes all tests in miscutil package
 
 
+### Data in package
+# url: http://r-pkgs.had.co.nz/data.html
+library(devtools)
+library(usethis)
+# make/read your data
+gene_mappability = data.frame(gene=paste0('Gene',1:10), mappability=seq(0.1,1,0.1), stringsAsFactor = F)
+cross_mappability = data.frame(from=paste0('Gene',c(1,3,1,5,2,9,10,2,2,3)), 
+                               to=paste0('Gene',c(2,1,9,2,3,1,3,10,3,5)),
+                               crossmap=1:10)
+library(ioutil)
+gene_mappability_fn = "~/Downloads/hg19_crossmap/hg19_gencode19_75merExon_36merUTR_2mismatch_gene_mappability.txt"
+gene_mappability = read_df(gene_mappability_fn, header = F, row.names = F)
+colnames(gene_mappability) = c('gene','mappability')
+rownames(gene_mappability) = gene_mappability$gene
+cross_mappability_fn = "~/Downloads/hg19_crossmap/hg19_gencode19_75merExon_36merUTR_2mismatch_cross_mappability.txt"
+cross_mappability = read_df(cross_mappability_fn, header = F, row.names = F)
+colnames(cross_mappability) = c('from', 'to', 'crossmap')
+# create package
+create_package('crossmap.hg19.gencode19.75merExon.36merUTR.2mismatch')
+# which data to use : create documents for them
+proj_set('crossmap.hg19.gencode19.75merExon.36merUTR.2mismatch')
+use_data(gene_mappability, cross_mappability)
+# make an R file in R/ and add documentation
