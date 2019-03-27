@@ -27,3 +27,28 @@ install_github(repo = 'alorchhota/autil', subdir = 'ioutil')
 
 ### how to include multiple functions in one documentation file
 # url: https://gist.github.com/jefferys/b79fe87314b0dc72fec9
+
+
+### unit test
+# url: http://r-pkgs.had.co.nz/tests.html
+library(usethis)
+library(testthat)
+proj_set('miscutil')
+use_testthat()
+# create a test file inside tests/testthat/
+# the test file name must start with "test"
+# sample code for a test file
+context("parse_delimitted_string tests")
+library(miscutil)
+test_that("parse delimitter", {
+  x = "one,two,three,"
+  expect_equal(length(parse_delimitted_string(x)),3)
+  expect_equal(length(parse_delimitted_string(x, rm.empty = F)),4)
+  expect_equal(length(parse_delimitted_string(x, delim = 'w', rm.empty = F)),2)
+  expect_match(parse_delimitted_string(x)[1],'one')
+  expect_is(parse_delimitted_string(x), 'character')
+})
+# sample code ends for a test file
+devtools::test('miscutil') # executes all tests in miscutil package
+
+

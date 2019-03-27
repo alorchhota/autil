@@ -2,6 +2,7 @@
 library('ioutil')
 library('genomicsutil')
 library('miscutil')
+library('mappabilityutil')
 
 ### files are on marcc
 expr_fn = "/work-zfs/abattle4/ashis/progdata/misc/cross_mappability/gtex_v7/processed_expression/Whole_Blood.v7.normalized_expression.txt"
