@@ -36,6 +36,7 @@ Returns a list object with the following items.
 \item{pvalue}{numeric, enrichment p-value}
 \item{random_known_ppi}{numeric vector, empirical number of known PPIs.}
 \item{observed_known_ppi}{numeric, observed number of known PPIs in the given interaction set.}
+\item{total_known_ppi}{numeric, total number of known PPIs possible between background genes.}
 }
 \description{
 This function computes enrichment of know PPIs in a given set of interactions.

@@ -20,6 +20,7 @@
 #' \item{pvalue}{numeric, enrichment p-value}
 #' \item{random_known_ppi}{numeric vector, empirical number of known PPIs.}
 #' \item{observed_known_ppi}{numeric, observed number of known PPIs in the given interaction set.}
+#' \item{total_known_ppi}{numeric, total number of known PPIs possible between background genes.}
 #' @export
 #' @examples 
 #' gene1s = c('TP53', 'TP53', 'RBM3', 'SF3', 'LIM12', 'MDM4', 'TMEM160')
@@ -95,6 +96,6 @@ string_ppi_enrichment <- function(interaction_df, bg, directed = FALSE, g1_col=c
   n_big_rand = sum(random_known_ppi >= observed_known_ppi)
   pvalue = (n_big_rand + 1) / (n_iter + 1)
   
-  return(list(pvalue = pvalue, random_known_ppi = random_known_ppi, observed_known_ppi = observed_known_ppi))
+  return(list(pvalue = pvalue, random_known_ppi = random_known_ppi, observed_known_ppi = observed_known_ppi, total_known_ppi = length(all_interactions_srings)))
   
 }
