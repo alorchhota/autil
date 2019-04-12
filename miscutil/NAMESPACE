@@ -3,5 +3,6 @@
 export(head_df)
 export(parse_delimitted_string)
 export(rminmax_df)
+export(sample_df)
 export(split_df)
 export(tail_df)
