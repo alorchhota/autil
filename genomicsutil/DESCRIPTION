@@ -5,7 +5,7 @@ Authors@R: person("Ashis", "Saha", email = "alorchhota@gmail.com", role = c("aut
 Description: This package contains genomics-related utility functions.
 Depends: R (>= 3.4)
 biocViews:
-Imports: Rdpack, edgeR, STRINGdb, miscutil
+Imports: Rdpack, edgeR, STRINGdb, miscutil, PRROC, reshape2, limma
 Remotes: github::alorchhota/autil/miscutil
 RdMacros: Rdpack
 License: GNU GPL v3
