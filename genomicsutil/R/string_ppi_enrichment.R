@@ -11,6 +11,8 @@
 #' @param species numeric. Species code for STRING (9606 for homo sapiens).
 #' @param score_threshold numeric. Interactions in STRING with score >= score_threshold are considered true interactions.
 #' @param string_dir character. Local path where STRING database will be stored locally so that it can be used offline.
+#' @param max_homology_bitscore numeric. Maximum homology score. \code{0} to filter all interactions between homologous proteins, \code{Inf} not to filter any interaction.
+#' @param benchmark_pathway character. Pathway type to benchmark. \code{NULL} to use all pathway types. Examples: \code{"KEGG", "REACTOME", "BIOCARTA", "Disease", "Pfam", "NCI", "ECOCYC".} See \code{pathwayType} parameter in \code{STRINGdb::benchmark_ppi()} function for details.
 #' @details This function computes enrichment of known protein-protein interactions (PPIs) in the given set of interactions. 
 #' It computes enrichment p-value as the probably that the number of known PPIs in the given set 
 #' is greater than or equal to that in a random set of same size.
@@ -29,7 +31,7 @@
 #' bg = unique(c(gene1s, gene2s, c('CD96', 'KEAP1', 'SRSF1', 'TSEN2')))
 #' enrich_res = string_ppi_enrichment(interaction_df, bg)
 
-string_ppi_enrichment <- function(interaction_df, bg, directed = FALSE, g1_col=colnames(interaction_df)[1], g2_col=colnames(interaction_df)[2], n_iter=1000, string_version="10", species=9606, score_threshold=400, string_dir=""){
+string_ppi_enrichment <- function(interaction_df, bg, directed = FALSE, g1_col=colnames(interaction_df)[1], g2_col=colnames(interaction_df)[2], n_iter=1000, string_version="10", species=9606, score_threshold=400, string_dir="", max_homology_bitscore=Inf, benchmark_pathway=NULL){
   require('STRINGdb')
   require('miscutil')
   
@@ -50,10 +52,19 @@ string_ppi_enrichment <- function(interaction_df, bg, directed = FALSE, g1_col=c
   } 
   mapped_interaction_df = unique(mapped_interaction_df[,c('STRING_id_1', 'STRING_id_2')])
   
-  
   # get background interactions
   all_interactions_df = string_db$get_interactions(bg_string_ids)
-  all_interactions_df = unique(all_interactions_df[,c('from','to'), drop=F])
+  all_interactions_df = unique(all_interactions_df[,c('from','to', 'combined_score'), drop=F])
+  colnames(all_interactions_df) = c('proteinA','proteinB','score') # column name change required for homologous removal and benchmark
+  if(is.finite(max_homology_bitscore)){
+    all_interactions_df = string_db$remove_homologous_interactions(interactions_dataframe = all_interactions_df, bitscore_threshold = max_homology_bitscore)
+  }
+  if(!is.null(benchmark_pathway)){
+    all_interactions_df = string_db$benchmark_ppi(interactions_dataframe = all_interactions_df, pathwayType = benchmark_pathway, max_homology_bitscore = max_homology_bitscore)
+    all_interactions_df = all_interactions_df[, c('proteinA', 'proteinB', 'score'), drop=F]
+  }
+  all_interactions_df = unique(all_interactions_df[, c('proteinA', 'proteinB'), drop=F])
+  colnames(all_interactions_df) = c('from','to')  # return back to original column names
   if(!directed)
     all_interactions_df = rminmax_df(all_interactions_df[,c('from', 'to'), drop=F], unique = T)
   all_interactions_srings = paste(all_interactions_df$from, all_interactions_df$to, sep = '|')

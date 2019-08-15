@@ -8,7 +8,8 @@ string_ppi_enrichment(interaction_df, bg, directed = FALSE,
   g1_col = colnames(interaction_df)[1],
   g2_col = colnames(interaction_df)[2], n_iter = 1000,
   string_version = "10", species = 9606, score_threshold = 400,
-  string_dir = "")
+  string_dir = "", max_homology_bitscore = Inf,
+  benchmark_pathway = NULL)
 }
 \arguments{
 \item{interaction_df}{A data.frame with gene-gene interactions. It must have at least 2 columns containing gene symbols.}
@@ -30,6 +31,10 @@ string_ppi_enrichment(interaction_df, bg, directed = FALSE,
 \item{score_threshold}{numeric. Interactions in STRING with score >= score_threshold are considered true interactions.}
 
 \item{string_dir}{character. Local path where STRING database will be stored locally so that it can be used offline.}
+
+\item{max_homology_bitscore}{numeric. Maximum homology score. \code{0} to filter all interactions between homologous proteins, \code{Inf} not to filter any interaction.}
+
+\item{benchmark_pathway}{character. Pathway type to benchmark. \code{NULL} to use all pathway types. Examples: \code{"KEGG", "REACTOME", "BIOCARTA", "Disease", "Pfam", "NCI", "ECOCYC".} See \code{pathwayType} parameter in \code{STRINGdb::benchmark_ppi()} function for details.}
 }
 \value{
 Returns a list object with the following items.
