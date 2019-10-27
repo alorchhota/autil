@@ -52,7 +52,9 @@ coexpression_ppi_auc <- function(net, gene_annot = NULL, symbol_col = "gene_name
   
   # get ppi scores
   known_ppis_df = get_string_ppi(genes = bg, directed = directed, string_version = string_version, species = species, score_threshold = 0, max_homology_bitscore = max_homology_bitscore, benchmark_pathway = benchmark_pathway, string_dir = string_dir)
-  known_ppi_score_mat = acast(data = known_ppis_df, formula = geneA ~ geneB, value.var = 'score')
+  known_ppi_score_mat = acast(data = known_ppis_df, formula = geneA ~ geneB, value.var = "score", fun.aggregate = max, na.rm = T)
+  known_ppi_score_mat[is.infinite(known_ppi_score_mat)] = NA
+  
   ppi_score_mat = matrix(NA, nrow = nrow(net), ncol = ncol(net), dimnames = list(rownames(net), colnames(net)))
   ppi_score_mat[rownames(known_ppi_score_mat), colnames(known_ppi_score_mat)] = known_ppi_score_mat
   if(!directed)
