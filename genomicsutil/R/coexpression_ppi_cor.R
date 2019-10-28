@@ -1,6 +1,6 @@
 #' Correlations between co-expression network edge weights and STRING protein-protein interaction (PPI) scores.
 #' 
-#' This function computes Pearson, Spearman and Kendall correlations between edge weights of a co-expression network and corresponding protein-protein interaction (PPI) scores from STRING.
+#' This function computes Pearson and Spearman correlations between edge weights of a co-expression network and corresponding protein-protein interaction (PPI) scores from STRING.
 #' @param net matrix. A gene x gene matrix where each entry represents the weight of the edge between corresponding genes. For a directed network, rows correspond to source genes and columns correspond to target genes. 
 #' Row and column names of \code{net} should be HGNC gene symbols or gene ids. If they are not HGNC gene symbols, gene annotations (\code{gene_annot}) must be provided.
 #' @param gene_annot data.frame. Gene annotations, where the row names correspond to gene ids and one of it columns (\code{symbol_col}) contains HGNC gene symbols.
@@ -19,7 +19,6 @@
 #' @return Returns a list object with the following items.
 #' \item{pearson}{Pearson correlation. Output from stats::cor.test()}
 #' \item{spearman}{Spearman correlation. Output from stats::cor.test()}
-#' \item{kendall}{Kendall correlation. Output from stats::cor.test()}
 #' @export
 #' @examples 
 #' genes = c('TP53', 'RBM3', 'SF3', 'LIM12', 'ATM', 'TMEM160', 'BCL2L1', 'MDM2', 'PDR', 'MEG3', 'EGFR', 'CD96', 'KEAP1', 'SRSF1', 'TSEN2')
@@ -70,7 +69,6 @@ coexpression_ppi_cor <- function (net, gene_annot = NULL, symbol_col = "gene_nam
   net_weight_values = net[lower.tri(net, diag = F)]
   pearson_test = cor.test(net_weight_values, ppi_score_values, method = 'pearson')
   spearman_test = cor.test(net_weight_values, ppi_score_values, method = 'spearman')
-  kendall_test = cor.test(net_weight_values, ppi_score_values, method = 'kendall')
-  return(list(pearson = pearson_test, spearman = spearman_test, kendall = kendall_test))
+  return(list(pearson = pearson_test, spearman = spearman_test))
 }
 

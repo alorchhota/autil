@@ -33,10 +33,9 @@ Row and column names of \code{net} should be HGNC gene symbols or gene ids. If t
 Returns a list object with the following items.
 \item{pearson}{Pearson correlation. Output from stats::cor.test()}
 \item{spearman}{Spearman correlation. Output from stats::cor.test()}
-\item{kendall}{Kendall correlation. Output from stats::cor.test()}
 }
 \description{
-This function computes Pearson, Spearman and Kendall correlations between edge weights of a co-expression network and corresponding protein-protein interaction (PPI) scores from STRING.
+This function computes Pearson and Spearman correlations between edge weights of a co-expression network and corresponding protein-protein interaction (PPI) scores from STRING.
 }
 \details{
 Note: higher values in \code{net} should correspond to higher confidence in the edge. If the sign of values mean positive or negative association between genes, you probably should provide absolute values. 
