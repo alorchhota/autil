@@ -7,6 +7,7 @@
 \alias{filter_expr_by_tpm_read}
 \alias{filter_expr_by_variance}
 \alias{filter_expr_by_coeff_of_variation}
+\alias{filter_expr_by_coordinate_overlap}
 \title{Functions to filter gene expression data}
 \usage{
 filter_expr_by_chr(expr.df, annot.gene, chr.include = as.character(1:22),
@@ -26,6 +27,10 @@ filter_expr_by_variance(expr.df, raw.df, n, min.var = 1e-06,
 
 filter_expr_by_coeff_of_variation(expr.df, raw.df, n, min.var = 1e-06,
   min.mean = 0.01)
+
+filter_expr_by_coordinate_overlap(expr.df, annot.gene,
+  priority.gene = rev(seq_len(nrow(expr.df))), chr.col = "chr",
+  pos.start.col = "start_pos", pos.end.col = "end_pos")
 }
 \arguments{
 \item{expr.df}{data.frame. processed expression data (gene x sample). See details.}
@@ -65,6 +70,12 @@ filter_expr_by_coeff_of_variation(expr.df, raw.df, n, min.var = 1e-06,
 \item{min.var}{numeric. minimum variance of expression per gene across all samples.}
 
 \item{min.mean}{numeric. minimum mean of expression per gene across all samples.}
+
+\item{priority.gene}{numeric. priority of genes. Higher value represents higher priority. See details.}
+
+\item{pos.start.col}{character or numeric. column name or column number containing start positions of genes in the gene annotation data frame.}
+
+\item{pos.end.col}{character or numeric. column name or column number containing end positions of genes in the gene annotation data frame.}
 }
 \value{
 Each function returns a data frame or matrix like object (similar to input type) with filtered expression data.
@@ -82,6 +93,7 @@ Typical filtering scenarios include:
   \item include genes with TPM > 0.1 in \eqn{\ge} 10 samples and read count > 6 in \eqn{\ge} 10 samples using \code{filter_expr_by_tpm_read},
   \item take only 500 most variant genes using \code{filter_expr_by_variance}, and
   \item take only 500 genes with highest coefficient of variation using \code{filter_expr_by_coeff_of_variation}.
+  \item if multiple genes overlap in their genomic coordinates, take only one of them with the highest variance using \code{filter_expr_by_coordinate_overlap}.
 }
 
 Data formats are important for these filter functions.
@@ -95,6 +107,9 @@ where each row represents a gene, and each column represents a property of the g
 The data frame must have row-names with unique gene ids matching to gene ids in expression data.
 While necessary columns in an annotation data frame can be configured in each function,
 the annotation data frame may contain more than necessary columns.
+
+The length of \code{priority.gene} must be same as the number of genes in the expression data (\code{expr.df}).
+\code{i}-th entry in \code{priority.gene} represents the priority of \code{i}-th gene in \code{expr.df}.
 }
 \section{Functions}{
 \itemize{
@@ -109,5 +124,7 @@ the annotation data frame may contain more than necessary columns.
 \item \code{filter_expr_by_variance}: filters expression data to include most variant \code{n} genes with mean \eqn{\ge} \code{min.mean} and variance \eqn{\ge} \code{min.var}
 
 \item \code{filter_expr_by_coeff_of_variation}: filters expression data to include genes with \code{n} highest coefficient of variation (variance/mean) and mean \eqn{\ge} \code{min.mean} and variance \eqn{\ge} \code{min.var}
+
+\item \code{filter_expr_by_coordinate_overlap}: filters expression data to exclude genes with overlap in their genomic coordinates. One of the overlapped genes is selected based on priority (\code{priority.gene})
 }}
 

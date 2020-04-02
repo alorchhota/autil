@@ -20,6 +20,9 @@
 #' @param min.var numeric. minimum variance of expression per gene across all samples.
 #' @param min.mean numeric. minimum mean of expression per gene across all samples.
 #' @param n maximum number of genes.
+#' @param priority.gene numeric. priority of genes. Higher value represents higher priority. See details.
+#' @param pos.start.col character or numeric. column name or column number containing start positions of genes in the gene annotation data frame.
+#' @param pos.end.col character or numeric. column name or column number containing end positions of genes in the gene annotation data frame.
 #' @details 
 #' Above functions filter processed gene expression data (\code{expr.df}) based on several different criteria.
 #' Typical filtering scenarios include:
@@ -30,6 +33,7 @@
 #'   \item include genes with TPM > 0.1 in \eqn{\ge} 10 samples and read count > 6 in \eqn{\ge} 10 samples using \code{filter_expr_by_tpm_read},
 #'   \item take only 500 most variant genes using \code{filter_expr_by_variance}, and
 #'   \item take only 500 genes with highest coefficient of variation using \code{filter_expr_by_coeff_of_variation}.
+#'   \item if multiple genes overlap in their genomic coordinates, take only one of them with the highest variance using \code{filter_expr_by_coordinate_overlap}.
 #' }
 #' 
 #' Data formats are important for these filter functions.
@@ -43,6 +47,9 @@
 #' The data frame must have row-names with unique gene ids matching to gene ids in expression data.
 #' While necessary columns in an annotation data frame can be configured in each function,
 #' the annotation data frame may contain more than necessary columns.
+#' 
+#' The length of \code{priority.gene} must be same as the number of genes in the expression data (\code{expr.df}).
+#' \code{i}-th entry in \code{priority.gene} represents the priority of \code{i}-th gene in \code{expr.df}.
 #' @describeIn filter_expr filteres to include or explore genes from given chromosomes (if not NULL). Chromosome names with or without "chr" prefix are gracefully handled.
 #' @return Each function returns a data frame or matrix like object (similar to input type) with filtered expression data.
 #' @export
@@ -149,6 +156,54 @@ filter_expr_by_coeff_of_variation <- function(expr.df, raw.df, n, min.var=1e-6, 
   coeff.var.sorted = sort(coeff.var, decreasing = T)
   features.passed = names(coeff.var.sorted[1:min(n, length(coeff.var.sorted))])
   expr.df = expr.df[features.passed,,drop=F]
+  return(expr.df)
+}
+
+#' @export
+#' @describeIn filter_expr filters expression data to exclude genes with overlap in their genomic coordinates. One of the overlapped genes is selected based on priority (\code{priority.gene})
+filter_expr_by_coordinate_overlap <- function(expr.df, annot.gene, priority.gene=rev(seq_len(nrow(expr.df))), chr.col = "chr", pos.start.col = "start_pos", pos.end.col = "end_pos"){
+  stopifnot(all(rownames(expr.df) %in% rownames(annot.gene)))  # every gene must be annotated
+  stopifnot(nrow(expr.df) == length(priority.gene))
+  
+  annot.gene = annot.gene[rownames(expr.df), ]
+  ord = order(annot.gene[,chr.col],annot.gene[,pos.start.col])
+  annot.gene.ordered = annot.gene[ord,]
+  priority.gene.ordered = priority.gene[ord]
+  
+  genes.to.filter = c()
+  for(g1_idx in seq_len(nrow(annot.gene.ordered)-1)){
+    g1_id = rownames(annot.gene.ordered)[g1_idx]
+    g1_chr = annot.gene.ordered[g1_idx, chr.col]
+    g1_pos_start = annot.gene.ordered[g1_idx, pos.start.col]
+    g1_pos_end = annot.gene.ordered[g1_idx, pos.end.col]
+    g1_priority = priority.gene.ordered[g1_idx]
+    
+    g2_idx = g1_idx + 1
+    while(g2_idx <= nrow(annot.gene.ordered)){
+      g2_id = rownames(annot.gene.ordered)[g2_idx]
+      g2_chr = annot.gene.ordered[g2_idx, chr.col]
+      g2_pos_start = annot.gene.ordered[g2_idx, pos.start.col]
+      g2_pos_end = annot.gene.ordered[g2_idx, pos.end.col]
+      g2_priority = priority.gene.ordered[g2_idx]
+      
+      if(g1_chr != g2_chr)
+        break
+      if(g2_pos_start > g1_pos_end)
+        break
+      
+      # overlap for filter
+      if(g2_pos_start <= g1_pos_end){
+        gene.to.filter = ifelse(g1_priority >= g2_priority, g2_id, g1_id)
+        genes.to.filter = append(genes.to.filter, gene.to.filter)
+      }
+      
+      g2_idx = g2_idx + 1
+    }
+  }
+  
+  ## filtes genes
+  genes.to.filter = unique(genes.to.filter)
+  expr.df = expr.df[!(rownames(expr.df) %in% genes.to.filter),,drop=F]
   return(expr.df)
 }
 
