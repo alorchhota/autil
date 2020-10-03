@@ -14,7 +14,7 @@ tmm_normalize <- function(expr_mat){
   require('edgeR')
   
   # expr_mat: gene x sample matrix
-  stopifnot(class(expr_mat) == 'matrix')
+  stopifnot(is.matrix(expr_mat))
   tmm_factors = calcNormFactors(expr_mat, method = "TMM")
   expr_mat = t(t(expr_mat)/tmm_factors)
   return(expr_mat)
