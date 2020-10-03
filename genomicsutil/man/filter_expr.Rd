@@ -10,27 +10,55 @@
 \alias{filter_expr_by_coordinate_overlap}
 \title{Functions to filter gene expression data}
 \usage{
-filter_expr_by_chr(expr.df, annot.gene, chr.include = as.character(1:22),
-  chr.exclude = NULL, chr.col = "chr")
+filter_expr_by_chr(
+  expr.df,
+  annot.gene,
+  chr.include = as.character(1:22),
+  chr.exclude = NULL,
+  chr.col = "chr"
+)
 
-filter_expr_by_mappability(expr.df, annot.mappability,
-  min.mappability = 0.97, mappability.col = "mappability")
+filter_expr_by_mappability(
+  expr.df,
+  annot.mappability,
+  min.mappability = 0.97,
+  mappability.col = "mappability"
+)
 
-filter_expr_by_gene_type(expr.df, annot.gene, type.col = "gene_type",
-  type.values = "protein_coding")
+filter_expr_by_gene_type(
+  expr.df,
+  annot.gene,
+  type.col = "gene_type",
+  type.values = "protein_coding"
+)
 
-filter_expr_by_tpm_read(expr.df, tpm.df, count.df, min.tpm = 0.1,
-  min.count = 6, min.samples = 10)
+filter_expr_by_tpm_read(
+  expr.df,
+  tpm.df,
+  count.df,
+  min.tpm = 0.1,
+  min.count = 6,
+  min.samples = 10
+)
 
-filter_expr_by_variance(expr.df, raw.df, n, min.var = 1e-06,
-  min.mean = -Inf)
+filter_expr_by_variance(expr.df, raw.df, n, min.var = 1e-06, min.mean = -Inf)
 
-filter_expr_by_coeff_of_variation(expr.df, raw.df, n, min.var = 1e-06,
-  min.mean = 0.01)
+filter_expr_by_coeff_of_variation(
+  expr.df,
+  raw.df,
+  n,
+  min.var = 1e-06,
+  min.mean = 0.01
+)
 
-filter_expr_by_coordinate_overlap(expr.df, annot.gene,
-  priority.gene = rev(seq_len(nrow(expr.df))), chr.col = "chr",
-  pos.start.col = "start_pos", pos.end.col = "end_pos")
+filter_expr_by_coordinate_overlap(
+  expr.df,
+  annot.gene,
+  priority.gene = rev(seq_len(nrow(expr.df))),
+  chr.col = "chr",
+  pos.start.col = "start_pos",
+  pos.end.col = "end_pos"
+)
 }
 \arguments{
 \item{expr.df}{data.frame. processed expression data (gene x sample). See details.}

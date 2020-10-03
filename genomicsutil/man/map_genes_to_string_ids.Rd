@@ -4,8 +4,12 @@
 \alias{map_genes_to_string_ids}
 \title{Map genes to STRING protein IDs.}
 \usage{
-map_genes_to_string_ids(genes, string_version = "10", species = 9606,
-  string_dir = "")
+map_genes_to_string_ids(
+  genes,
+  string_version = "10",
+  species = 9606,
+  string_dir = ""
+)
 }
 \arguments{
 \item{genes}{A character vector with HGNC gene symbols.}

@@ -4,8 +4,13 @@
 \alias{coexpression_shared_pathway_auc}
 \title{AUC of a co-expression networks using known pathways (gene sets).}
 \usage{
-coexpression_shared_pathway_auc(net, gene_sets, gene_annot = NULL,
-  symbol_col = "gene_name", directed = FALSE)
+coexpression_shared_pathway_auc(
+  net,
+  gene_sets,
+  gene_annot = NULL,
+  symbol_col = "gene_name",
+  directed = FALSE
+)
 }
 \arguments{
 \item{net}{matrix. A gene x gene matrix where each entry represents the weight of the edge between corresponding genes. For a directed network, rows correspond to source genes and columns correspond to target genes. 

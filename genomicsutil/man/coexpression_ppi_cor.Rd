@@ -4,10 +4,17 @@
 \alias{coexpression_ppi_cor}
 \title{Correlations between co-expression network edge weights and STRING protein-protein interaction (PPI) scores.}
 \usage{
-coexpression_ppi_cor(net, gene_annot = NULL, symbol_col = "gene_name",
-  directed = FALSE, string_version = "10", species = 9606,
-  string_dir = "", max_homology_bitscore = Inf,
-  benchmark_pathway = NULL)
+coexpression_ppi_cor(
+  net,
+  gene_annot = NULL,
+  symbol_col = "gene_name",
+  directed = FALSE,
+  string_version = "10",
+  species = 9606,
+  string_dir = "",
+  max_homology_bitscore = Inf,
+  benchmark_pathway = NULL
+)
 }
 \arguments{
 \item{net}{matrix. A gene x gene matrix where each entry represents the weight of the edge between corresponding genes. For a directed network, rows correspond to source genes and columns correspond to target genes. 

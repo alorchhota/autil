@@ -48,7 +48,7 @@
 coexpression_pathway_enrichment <- function(net, gene_sets, min.gene=3, max.gene=100, iter=10000){
   require(MASS)
   
-  stopifnot(class(gene_sets) == 'list')
+  stopifnot(is.list(gene_sets))
   stopifnot(setequal(rownames(net), colnames(net)))
   if(sum(!is.finite(net)) > 0)
     stop('every edge weight in the network must be finite.')

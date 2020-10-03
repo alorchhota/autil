@@ -4,8 +4,13 @@
 \alias{coexpression_pathway_enrichment}
 \title{Enrichment of pathways (gene sets) in a co-expression network.}
 \usage{
-coexpression_pathway_enrichment(net, gene_sets, min.gene = 3,
-  max.gene = 100, iter = 10000)
+coexpression_pathway_enrichment(
+  net,
+  gene_sets,
+  min.gene = 3,
+  max.gene = 100,
+  iter = 10000
+)
 }
 \arguments{
 \item{net}{matrix. A gene x gene square matrix where each entry represents the weight of the edge between corresponding genes.}

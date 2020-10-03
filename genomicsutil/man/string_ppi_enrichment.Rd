@@ -4,12 +4,20 @@
 \alias{string_ppi_enrichment}
 \title{Enrichment of protein-protein interactions (PPIs)}
 \usage{
-string_ppi_enrichment(interaction_df, bg, directed = FALSE,
+string_ppi_enrichment(
+  interaction_df,
+  bg,
+  directed = FALSE,
   g1_col = colnames(interaction_df)[1],
-  g2_col = colnames(interaction_df)[2], n_iter = 1000,
-  string_version = "10", species = 9606, score_threshold = 400,
-  string_dir = "", max_homology_bitscore = Inf,
-  benchmark_pathway = NULL)
+  g2_col = colnames(interaction_df)[2],
+  n_iter = 1000,
+  string_version = "10",
+  species = 9606,
+  score_threshold = 400,
+  string_dir = "",
+  max_homology_bitscore = Inf,
+  benchmark_pathway = NULL
+)
 }
 \arguments{
 \item{interaction_df}{A data.frame with gene-gene interactions. It must have at least 2 columns containing gene symbols.}

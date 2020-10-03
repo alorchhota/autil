@@ -8,7 +8,7 @@
 #' inv_norm_x = to_inv_normal(x)
 #' @export
 to_inv_normal <- function(expr_mat){
-  stopifnot(class(expr_mat) == 'matrix')
+  stopifnot(is.matrix(expr_mat))
   # expr_mat : gene x sample matrix
   transformed_data <- apply(expr_mat, 1, function(x){
     qnorm((rank(x,na.last="keep")-0.5)/sum(!is.na(x)))

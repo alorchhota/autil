@@ -19,9 +19,9 @@ rm_cov_from_expr <- function(expr_df, cov_df){
     warning('samples names are not same in expr_df and cov_df.')
   }
   
-  if(class(expr_df) != 'matrix')
+  if(!is.matrix(expr_df))
     expr_df = as.matrix(expr_df)  # gene x sample
-  if(class(cov_df) != 'data.frame')
+  if(!is.data.frame(cov_df))
     cov_df = as.data.frame(cov_df)  # sample x cov
   
   cov_mat = model.matrix( ~ ., data=cov_df)

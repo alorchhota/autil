@@ -4,9 +4,16 @@
 \alias{get_string_ppi}
 \title{Protein-protein interactions (PPIs) within given set of genes.}
 \usage{
-get_string_ppi(genes, directed = FALSE, string_version = "10",
-  species = 9606, score_threshold = 400, string_dir = "",
-  max_homology_bitscore = Inf, benchmark_pathway = NULL)
+get_string_ppi(
+  genes,
+  directed = FALSE,
+  string_version = "10",
+  species = 9606,
+  score_threshold = 400,
+  string_dir = "",
+  max_homology_bitscore = Inf,
+  benchmark_pathway = NULL
+)
 }
 \arguments{
 \item{genes}{A character vector with gene symbols.}

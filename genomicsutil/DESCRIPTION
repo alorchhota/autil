@@ -11,4 +11,4 @@ RdMacros: Rdpack
 License: GNU GPL v3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 7.1.1
